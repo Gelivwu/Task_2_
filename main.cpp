@@ -34,7 +34,6 @@ int main() {
     for (auto& th : threads)
         th.join();
 
-    std::cout << "Time: "
         << (clock() - timer) / 1000.0 << " сек." << std::endl;
 
     return 0;
