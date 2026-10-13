@@ -13,18 +13,18 @@ int main() {
 
     std::vector<int> vect(100000000);
 
-    time_t timer = clock(); // С„РёРєСЃРёСЂСѓРµРј РІСЂРµРјСЏ СЃС‚Р°СЂС‚Р°
+    time_t timer = clock(); // фиксируем время старта
 
-    // РћРїСЂРµРґРµР»СЏРµРј РєРѕР»РёС‡РµСЃС‚РІРѕ Р°РїРїР°СЂР°С‚РЅС‹С… РїРѕС‚РѕРєРѕРІ, РґРѕСЃС‚СѓРїРЅС‹С… СЃРёСЃС‚РµРјРµ
+    // Определяем количество аппаратных потоков, доступных системе
     unsigned int numThreads = std::thread::hardware_concurrency();
 
     int size = static_cast<int>(vect.size());
-    int chunk = size / static_cast<int>(numThreads); // СЂР°Р·РјРµСЂ РєСѓСЃРєР° РЅР° РѕРґРёРЅ РїРѕС‚РѕРє (С†РµР»РѕС‡РёСЃР»РµРЅРЅРѕРµ РґРµР»РµРЅРёРµ)
+    int chunk = size / static_cast<int>(numThreads); // размер куска на один поток (целочисленное деление)
     std::vector<std::thread> threads;
     threads.reserve(numThreads);
 
     for (unsigned int t = 0; t < numThreads; t++) {
-        int start = static_cast<int>(t) * chunk; // РЅР°С‡Р°Р»Рѕ РґРёР°РїР°Р·РѕРЅР° РґР»СЏ С‚РµРєСѓС‰РµРіРѕ РїРѕС‚РѕРєР°
+        int start = static_cast<int>(t) * chunk; // начало диапазона для текущего потока
 
         int end = (t == numThreads - 1) ? size : start + chunk;
 
@@ -35,7 +35,7 @@ int main() {
         th.join();
 
     std::cout << "Time: "
-        << (clock() - timer) / 1000.0 << " СЃРµРє." << std::endl;
+        << (clock() - timer) / 1000.0 << " сек." << std::endl;
 
     return 0;
 }
